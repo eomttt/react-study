@@ -1,2 +1,5 @@
-./**/node_modules/
+gugudan/node_modules
+number-baseball/node_modules
+**/node_modules
+
 .DS_Store
