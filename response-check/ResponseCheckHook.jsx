@@ -6,6 +6,9 @@ const ResponseCheckHook = () => {
   const [message, setMessage] = useState('Click to start.');
   const [result, setResult] = useState([]);
 
+  // useRef 는 DOM에서도 사용하지만 값이 변한다 해도 rendering이 되지 않는다.
+  // useState 는 값이 변하면 rendering 이 다시 되기 때문에
+  // 값이 변해도 rendering 이 필요 없는 변수는 useRef로 사용한다.
   const clickTimer = useRef(null);
   const startTime = useRef(0);
   const endTime = useRef(0);
