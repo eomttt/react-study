@@ -1,63 +1,107 @@
-import React, { Component } from 'react';
+import React, { Component, createRef} from 'react';
+import Try from './try';
+
+// 재사용 가능성이 있는 함수는 밖에다
+const getNumbers = () => {
+  const candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const array = [];
+  for (let i=0; i<4; i++) {
+    const randIndex = Math.floor(Math.random() * (9 - i));
+    const chosen = candidates.splice(randIndex , 1)[0];
+    array.push(chosen);
+  }
+
+  return array;
+}
 
 class ClassApp extends Component {
   state = {
-   word: '밤편지 클래스',
-   value: '',
-   result: ''
-  };
-  input;
+    result: '',
+    value: '',
+    answer: getNumbers(),
+    tries: [] // {try, result}
+  }
+  input = createRef();
+
+  _initState = () => {
+    this.setState({
+      value: '',
+      answert: getNumbers(),
+      tries: []
+    }); 
+  }
 
   _onSubmit = (event) => {
+    const { value, tries, answer } = this.state
     event.preventDefault();
 
-    if (this._isRelayedWord()) {
-      this.setState((prevState) => {
-        return {
-          word: prevState.value,
-          value: '',
-          result: 'Correct'
-        }
-       });
-    } else {
+    if (value === answer.join('')) {
       this.setState({
-        value: '',
-        result: 'Wrong'
+        result: 'HOMERUN!!!'
       });
+
+      alert('Restart game');
+      this._initState();
+    } else {
+      if (tries.length >= 4) {
+        this.setState({
+          result: 'You wrong in 5 times. answer is ' + answer.join('')
+        });
+        alert('Restart game');
+        this._initState();
+      } else {
+        const valueArray = value.split('').map((v) => parseInt(v));
+        let strike = 0;
+        let ball = 0;
+
+        for (let i=0; i<4; i++) {
+          if (valueArray[i] === answer[i]) {
+            strike ++;
+          } else if (answer.includes(valueArray[i])) {
+            ball ++;
+          }
+        } // 몇 strike, 몇 ball 인지 판단하는 로직
+
+        this.setState((prevState) => {
+          return {
+            value: '',
+            // state에 있는 value는 immutable 이여야 한다. react가 변화는 감지해서 렌더링 하는데 push를 써서 변하게 하면 변화를 감지 못한다.
+            tries: [...prevState.tries, {try: value, result: strike + ' strike ' + ball + ' ball'}]
+          }
+        });
+      }
+      this.input.current.focus(); // Create ref 사용
     }
-
-    this.input.focus(); // Cursor를 옮겨준다.
   }
 
-  _isRelayedWord = () => {
-    let resultLastWord = this.state.word[this.state.word.length - 1],
-      valueFirstWord = this.state.value[0];
-
-    return resultLastWord === valueFirstWord;
-  }
-
-  _onChange = (event) => {
-    this.setState({value: event.target.value}) // State를 변경 해준다. (value 변경)
-  }
-
-  _onInputRef = (ref) => {
-    this.input = ref; // Input cursor를 세팅해준다.
+  _onChange = (e) => {
+    this.setState({
+      value: e.target.value
+    });
   }
 
   render() {
-    console.log('Rendering');
+    const { result, value, tries } = this.state;
     return (
       <>
-        <div>{this.state.word}</div>
+        <div>{this.state.answer}</div>
+        <div>{result}</div>
         <form onSubmit={this._onSubmit}>
-          <input ref={this._onInputRef} type='text' value={this.state.value} onChange={this._onChange}/>
+          <input ref={this.input} type='text' value={value} onChange={this._onChange}/>
           <button>Insert!</button>
         </form>
-        <div>{this.state.result}</div>
+        <div>
+          {/* map 함수, jsx 에서 반복문 사용시 key값을 꼭 넣어주어야 한다. */}
+          {/* 단순히 index를 넣어주면 key를 기준으로 엘리먼트를 추가, 수정, 삭제 하는데 배열 순이 바뀌는 경우에 문제가 생길 수 있다. */}
+          {tries.map((v, i) => {
+            return (
+              <Try key={v.try + v.result} tryInfo={v}></Try>
+            )
+          })}
+        </div>
       </>
     );
   }
 }
 
-
-
+export default ClassApp;
