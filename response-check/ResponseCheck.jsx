@@ -47,7 +47,7 @@ class ResponseCheck extends Component {
     }
   }
 
-  reunderAverage = () => {
+  renderAverage = () => {
     const { result } = this.state;
 
     return result.length === 0 ? null : <><div>Average time: {(result.reduce((a, b) => a + b)) / result.length}</div></>
@@ -65,7 +65,7 @@ class ResponseCheck extends Component {
         >
           {message}
         </div>
-        {this.reunderAverage()}
+        {this.renderAverage()}
       </>
     );
   }

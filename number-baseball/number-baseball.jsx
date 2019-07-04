@@ -21,7 +21,7 @@ class ClassApp extends Component {
     answer: getNumbers(),
     tries: [] // {try, result}
   }
-  input = createRef();
+  input = createRef(); // createRef 를 사용하여 hooks에서 처럼 .current 를 붙여줄 수 있게 한다.
 
   _initState = () => {
     this.setState({
