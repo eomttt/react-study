@@ -20,7 +20,7 @@ const computerChoice = (imageCoord) => {
   return Object.entries(rspCoords).find((value) => {
     return value[1] === imageCoord;
   })[0];
-}
+};
 
 class RcpGame extends Component {
   state = {
