@@ -30,11 +30,13 @@ const RcpGame = () => {
 
   const interval = useRef(null);
 
-  useEffect(() => {
+  // 첫 번째 인수는 함수 두 번째 인수는 변수인데, 이 두 번째 인수가 클로저 문제를 해결해 준다.
+  // 즉, 두 번째 인수 배열에 넣은 값 들이 바뀔 때에 useEffect 가 실행된다.
+  useEffect(() => { // componentDidMount, componentDidUpdate 역할 (1대1 대응은 아님)
     console.log('Restart');
     // useRef: Use .current
-    interval.current = setInterval(changeHand, 100);
-    return () => {
+    interval.current = setInterval(changeHand, 500000);
+    return () => { // componentWillUnmount 역할
       console.log('End');
       clearInterval(interval.current);
     }
