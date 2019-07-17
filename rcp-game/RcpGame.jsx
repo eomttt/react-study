@@ -39,7 +39,7 @@ class RcpGame extends Component {
     // Nothing
   }
 
-  componentWillUnMount() {
+  componentWillUnmount() {
     clearInterval(this.interval);
   }
 
