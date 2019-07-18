@@ -8,6 +8,7 @@ import Table from './Table';
 class TicTacToe extends Component {
 
   componentDidUpdate(prevProps, prevState) {
+    // Can set from props in reducers state and action functions
     const { recentCell, tableData } = this.props;
     const { setWinner, resetGame, changeTurn } = this.props;
 
@@ -16,11 +17,9 @@ class TicTacToe extends Component {
 
     let win = false;
 
-    if (row < 0) {
+    if (row < 0) { // recentCell row index is -1, pass
       return;
     }
-
-    console.log(row);
 
     if (tableData[row][0] !== '' && tableData[row][0] === tableData[row][1] && tableData[row][1] === tableData[row][2]) {
       win = true;
@@ -33,25 +32,25 @@ class TicTacToe extends Component {
     }
     if (tableData[0][2] !== '' && tableData[0][2] === tableData[1][1] && tableData[1][1] === tableData[2][0]) {
       win = true;
-    }
+    } // Check 가로, 세로, 대각선
 
     if (win) {
       setWinner();
-      resetGame();
+      resetGame(); // If has winner setWinner and resetGame
     } else {
       let all = true // if all is true, game is draw
       tableData.forEach((row) => {
         row.forEach((column) => {
-          if (column !== '') {
+          if (column === '') {
             all = false;
           }
         });
       });
 
       if (all) {
-        resetGame();
+        resetGame(); // Set reset game
       } else {
-        changeTurn();
+        changeTurn(); // Change turn O -> X -> O...
       }
     }
   }
@@ -72,15 +71,15 @@ const mapStateToProps = (state) => ({
   tableData: state.tableData,
   recentCell: state.recentCell,
   winner: state.winner
-});
+}); // From reducers
 
 const mapDispatchToProps = (dispatch) => ({
   setWinner: () => dispatch(action.setWinner()),
   resetGame: () => dispatch(action.resetGame()),
-  changeTurn: () => dispatch(action.changeTurn())
-});
+  changeTurn: () => dispatch(action.changeTurn()) // Use dispatch for call action function
+}); // From reducers
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TicTacToe);
+)(TicTacToe); // Connect for use Redux

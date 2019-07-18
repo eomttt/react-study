@@ -26,6 +26,7 @@ class Td extends PureComponent {
   }
 }
 
+// ownProps is props from parent
 const mapStateToProps = (state, ownProps) => ({
   tableData: state.tableData,
   turn: state.turn,
