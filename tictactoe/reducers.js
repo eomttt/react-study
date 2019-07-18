@@ -19,10 +19,15 @@ const reducer = (state=initState, action) => {
       tableData[action.rowIndex][action.columnIndex] = action.turn;
       return {
         ...state,
-        tableData
+        tableData,
+        recentCell: [action.rowIndex, action.columnIndex]
       };
     case actions.SET_WINNER:
-      return state;
+    console.log('set winnner', state.turn);
+      return {
+        ...state,
+        winner: 'Winner is ' + state.turn
+      };
     case actions.CHANGE_TURN:
       return {
         ...state,
