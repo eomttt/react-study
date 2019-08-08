@@ -1,4 +1,4 @@
-import { all, put, select, delay, takeLatest, takeEvery, call } from 'redux-saga/effects';
+import { all, put, take, select, delay, takeLatest, takeEvery, call, fork } from 'redux-saga/effects';
 
 import * as actions from './actions';
 
@@ -24,12 +24,21 @@ function* loginAction() {
   }
 }
 
+
+// function* actionWatcher() {
+//   while(true) {
+//     yield take(actions.LOGIN_REQUEST);
+//     yield call(loginAction);
+//   }
+// }
+
 function* actionWatcher() {
   yield takeEvery(actions.LOGIN_REQUEST, loginAction);
+  // yield takeLatest(actions.LOGIN_REQUEST, loginAction);
 }
 
 export default function* rootSaga() {
   yield all([
-    actionWatcher(),
+    fork(actionWatcher),
   ]);
 }
