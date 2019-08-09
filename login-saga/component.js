@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Container = ({submitLogin}) => {
+const Container = ({ submitLogin, isLoggingIn, isLoggedIn }) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -26,6 +26,9 @@ const Container = ({submitLogin}) => {
         <input type="text" placeholder="email" value={id} onChange={onChangeId}/>
         <input type="password" placeholder="password" value={password} onChange={onChangePassword}/>
         <button>LOG IN</button>
+        {
+          !!isLoggingIn && <div>LOGGIN IN</div>
+        }
       </form>
     </>
   );

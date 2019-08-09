@@ -5,9 +5,8 @@ import * as actions from './actions';
 function _login() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      console.log('Login success');
       resolve();
-    }, 1000)
+    }, 3000)
   });
 }
 
@@ -18,6 +17,7 @@ function* loginAction() {
       type: actions.LOGIN_SUCCESS
     })
   } catch(error) {
+    console.log("Login error", error);
     yield put({
       type: actions.LOGIN_FAILURE
     })
